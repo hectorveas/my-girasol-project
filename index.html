@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Girasol para ti</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            background-color: skyblue;
+            height: 100%;
+        }
+
+        #container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        svg {
+            height: 100%;
+            width: 100%;
+            transition: transform 2s;
+        }
+
+        .message {
+            animation: moveText 2s forwards;
+        }
+
+        @keyframes moveText {
+            from {
+                transform: translateX(-200px);
+            }
+
+            to {
+                transform: translateX(0px);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container">
+        <svg id="mysvg" viewBox="0 0 400 400">
+            <circle id="sun" cx="200" cy="400" r="40" style="fill:yellow;" />
+            <!-- Dibujar fondo verde -->
+            <rect x="-200" y="330" rx="0" ry="0" width="800" height="100" style="fill:green" />
+            <!-- Tallo -->
+            <line x1="200" y1="400" x2="200" y2="200" style="stroke:green;stroke-width:7;" />
+            <!-- Pétalos -->
+            <g id="petalos">
+                <!-- Los pétalos serán agregados aquí -->
+            </g>
+            <!-- Centro del girasol -->
+            <circle cx="200" cy="200" r="30" style="fill:brown;" />
+        </svg>
+    </div>
+
+    <script>
+        function addText(y, fontSize, content) {
+            const svg = document.getElementById('mysvg');
+            const text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+            text.setAttribute("x", "200");
+            text.setAttribute("y", y);
+            text.setAttribute("font-family", "Verdana");
+            text.setAttribute("font-size", fontSize);
+            text.setAttribute("fill", "red");
+            text.setAttribute("text-anchor", "middle");
+            text.setAttribute("class", "message");
+            text.textContent = content;
+            svg.appendChild(text);
+        }
+
+        function addPetal(angle) {
+            const petalos = document.getElementById('petalos');
+            const petalGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
+            const petal = document.createElementNS("http://www.w3.org/2000/svg", "ellipse");
+            petal.setAttribute("cx", "250");
+            petal.setAttribute("cy", "200");
+            petal.setAttribute("rx", "25");
+            petal.setAttribute("ry", "15");
+            petal.setAttribute("style", "fill:yellow;stroke:#FFCC00;stroke-width:1;");
+            petalGroup.appendChild(petal);
+            petalGroup.setAttribute("transform", `rotate(${angle}, 200, 200)`);
+            petalos.appendChild(petalGroup);
+        }
+
+        let angle = 0;
+        const intervalId = setInterval(() => {
+            addPetal(angle);
+            angle += 20;
+            if (angle >= 360) {
+                clearInterval(intervalId);
+                addText("100", "20", "Te regalo esta hermosa flor amarilla");
+                setTimeout(() => {
+                    addText("120", "10", "Con mucho cariño para Camila Esperanza Rivas Salgado <3");
+                }, 2500);
+            }
+        }, 250);
+
+        // Move the sun from the bottom to the top
+        let sunY = 100;
+        const sun = document.getElementById('sun');
+        const sunInterval = setInterval(() => {
+            sunY -= 1;
+            sun.setAttribute('cy', sunY);
+            if (sunY <= 50) {
+                clearInterval(sunInterval);
+            }
+        }, 30);
+
+    </script>
+</body>
+
+</html>
